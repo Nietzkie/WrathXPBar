@@ -27,6 +27,7 @@ frame:SetClampedToScreen(true)
 
 local db = nil
 
+local sessionInitialized = false
 local xpStartTime = time()
 local sessionStartTime = time()
 local sessionXP = 0
@@ -299,6 +300,22 @@ frame.mouse:SetScript("OnLeave", function()
 end)
 
 local function GetXPModeData()
+
+    if IsAtMaxLevel() then
+        return {
+            mode = "xp",
+            left = "Level " .. UnitLevel("player"),
+            center = "Max Level",
+            right = "",
+            current = 1,
+            max = 1,
+            rested = 0,
+            color = {0.62, 0.18, 0.88, 0.95},
+            topLeft = "Time this level: --",
+            topRight = "Time this session: " .. FormatTime(time() - sessionStartTime),
+        }
+    end
+
     local curr = UnitXP("player") or 0
     local maxv = UnitXPMax("player") or 1
     local rested = GetXPExhaustion() or 0
@@ -316,7 +333,7 @@ local function GetXPModeData()
         current = curr,
         max = maxv,
         rested = rested,
-        color = { 0.62, 0.18, 0.88, 0.95 },
+        color = {0.62, 0.18, 0.88, 0.95},
         topLeft = "Time this level: " .. FormatTime(time() - xpStartTime),
         topRight = "Time this session: " .. FormatTime(time() - sessionStartTime),
     }
@@ -509,20 +526,27 @@ local function OnEvent(self, event, ...)
 
         ApplyFrameSettings()
         SetLocked(db.locked)
+
         lastXP = UnitXP("player") or 0
         lastMaxXP = UnitXPMax("player") or 1
         lastLevel = UnitLevel("player") or 1
         lastRested = GetXPExhaustion() or 0
+
         FullRefresh()
 
     elseif event == "PLAYER_ENTERING_WORLD" then
-        sessionStartTime = time()
-        xpStartTime = time()
-        sessionXP = 0
+        if not sessionInitialized then
+            sessionInitialized = true
+            sessionStartTime = time()
+            xpStartTime = time()
+            sessionXP = 0
+        end
+
         lastXP = UnitXP("player") or 0
         lastMaxXP = UnitXPMax("player") or 1
         lastLevel = UnitLevel("player") or 1
         lastRested = GetXPExhaustion() or 0
+
         FullRefresh()
 
     elseif event == "PLAYER_XP_UPDATE" then
