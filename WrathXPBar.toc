@@ -1,0 +1,6 @@
+## Interface: 30300
+## Title: WrathXPBar
+## Notes: Minimalistische XP-Leiste im WeakAuras-Stil fuer WoW 3.3.5a
+## Author: OpenAI
+## Version: 1.0.0
+WrathXPBar.lua
