@@ -60,8 +60,4 @@ Designed to be minimal, informative, and lightweight.
 
 ## Screenshot
 
-Add your screenshot here.
-
-Example:
-
-![WrathXPBar Screenshot](screenshots/example.png)
+![WrathXPBar Screenshot](screenshot/example.png)
